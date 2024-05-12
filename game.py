@@ -2,8 +2,8 @@ from telethon.sync import TelegramClient, events
 import random
 
 # Your Telegram API credentials
-API_ID = '24851795'
-API_HASH = 'fe711257cd657bcc2b9244c2b5efc151'
+API_ID = '27913018'
+API_HASH = '04e2f4e414cdabe52ad985adaa6cfe09'
 
 # Your Telegram Bot token
 BOT_TOKEN = '6826415817:AAG1alKRjdc20hXtYtVT20yowAR2nCnHLWQ'
@@ -12,7 +12,7 @@ BOT_TOKEN = '6826415817:AAG1alKRjdc20hXtYtVT20yowAR2nCnHLWQ'
 client = TelegramClient('user_session', API_ID, API_HASH)
 
 # Initialize the Telegram client for bot session
-client_bot = TelegramClient('bot_session', BOT_TOKEN)
+client_bot = TelegramClient('bot_session', API_ID, API_HASH, bot_token=BOT_TOKEN)
 
 # Dictionary to store ongoing games
 games = {}
