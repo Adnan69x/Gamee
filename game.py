@@ -1,11 +1,18 @@
-from telethon import TelegramClient, events
+from telethon.sync import TelegramClient, events
 import random
+
+# Your Telegram API credentials
+API_ID = '24851795'
+API_HASH = 'fe711257cd657bcc2b9244c2b5efc151'
 
 # Your Telegram Bot token
 BOT_TOKEN = '6826415817:AAG1alKRjdc20hXtYtVT20yowAR2nCnHLWQ'
 
-# Initialize the Telegram client with the bot token
-client = TelegramClient('tic_tac_toe_bot', api_id=None, api_hash=None, bot_token=BOT_TOKEN)
+# Initialize the Telegram client for user session
+client = TelegramClient('user_session', API_ID, API_HASH)
+
+# Initialize the Telegram client for bot session
+client_bot = TelegramClient('bot_session', BOT_TOKEN)
 
 # Dictionary to store ongoing games
 games = {}
@@ -78,17 +85,31 @@ def check_winner(board):
         return board[0][2]
     return None
 
-# Event handler for incoming messages
+# Event handler for incoming messages in user session
 @client.on(events.NewMessage(pattern='/start'))
 async def start(event):
     await start_game(event)
 
-# Event handler for making a move
+# Event handler for making a move in user session
 @client.on(events.NewMessage(pattern=r'\d \d'))
 async def move(event):
     position = tuple(map(int, event.message.text.split()))
     await make_move(event, position)
 
-# Start the client
+# Start the user session client
 client.start()
-client.run_until_disconnected()
+
+# Event handler for incoming messages in bot session
+@client_bot.on(events.NewMessage(pattern='/start'))
+async def start_bot(event):
+    await start_game(event)
+
+# Event handler for making a move in bot session
+@client_bot.on(events.NewMessage(pattern=r'\d \d'))
+async def move_bot(event):
+    position = tuple(map(int, event.message.text.split()))
+    await make_move(event, position)
+
+# Start the bot session client
+client_bot.start()
+client_bot.run_until_disconnected()
